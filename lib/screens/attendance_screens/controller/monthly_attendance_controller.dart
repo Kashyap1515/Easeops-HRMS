@@ -19,7 +19,7 @@ class MonthlyAttendanceController extends GetxController {
   final NetworkApiService apiService = NetworkApiService();
   RxBool isActiveDaysLoading = true.obs;
   RxBool isWeekDayLoading = true.obs;
-  RxBool isListView = false.obs;
+  RxBool isListView = true.obs;
   Rx<DateTime> startDateTime = DateTime.now().obs;
   Rx<DateTime> endDateTime = DateTime.now().obs;
   RxList<AttendanceReportUserModel> attendanceDailyModel =
@@ -77,7 +77,9 @@ class MonthlyAttendanceController extends GetxController {
             userListData.add(
                 {'id': data[index].user!.id, 'label': data[index].user!.name});
           }
+          isListView.value = false;
         } else {
+          isListView.value = false;
           customSnackBar(
             title: AppStrings.textError,
             message: AppStrings.textErrorMessage,
@@ -117,8 +119,7 @@ class MonthlyAttendanceController extends GetxController {
           for (var data in activeDayData) {
             DateTime normalizedDate =
                 normalizeDate(DateTime.parse(data['marked_at']));
-            String locationName =
-                data['location']['name'] ?? '';
+            String locationName = data['location']['name'] ?? '';
 
             Event newEvent = Event('Present', locationName);
 
@@ -203,8 +204,8 @@ class MonthlyAttendanceController extends GetxController {
 
     for (int index = 0; index < attendanceMonthlyModel.length; index++) {
       for (DateTime date = startDate;
-      date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
-      date = date.add(const Duration(days: 1))) {
+          date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
+          date = date.add(const Duration(days: 1))) {
         List<String> lstInTime = [];
         List<String> lstOutTime = [];
         String delay = '-';
@@ -212,13 +213,13 @@ class MonthlyAttendanceController extends GetxController {
         String totalTime = '-';
 
         var attendanceItem =
-        attendanceMonthlyModel[index].attendanceList?.firstWhere(
-              (item) =>
-          item.markedAt?.toLocal().day == date.day &&
-              item.markedAt?.toLocal().month == date.month &&
-              item.markedAt?.toLocal().year == date.year,
-          orElse: () => AttendanceList(),
-        );
+            attendanceMonthlyModel[index].attendanceList?.firstWhere(
+                  (item) =>
+                      item.markedAt?.toLocal().day == date.day &&
+                      item.markedAt?.toLocal().month == date.month &&
+                      item.markedAt?.toLocal().year == date.year,
+                  orElse: () => AttendanceList(),
+                );
 
         if (attendanceItem != null && attendanceItem.markedAt != null) {
           bool isFirstCheckin = true;
@@ -226,12 +227,12 @@ class MonthlyAttendanceController extends GetxController {
             for (var session in attendanceItem.sessionList!) {
               String inTime = session.checkinAt != null
                   ? formatDateToHHMMAP(
-                  convertDateTimeLocalTimeZone(session.checkinAt!))
+                      convertDateTimeLocalTimeZone(session.checkinAt!))
                   : '-';
 
               String outTime = session.checkoutAt != null
                   ? formatDateToHHMMAP(
-                  convertDateTimeLocalTimeZone(session.checkoutAt!))
+                      convertDateTimeLocalTimeZone(session.checkoutAt!))
                   : '-';
 
               lstInTime.add(inTime);
@@ -239,12 +240,15 @@ class MonthlyAttendanceController extends GetxController {
 
               if (session.shift != null) {
                 shiftTime =
-                '${formatTime(session.shift!.startTime!)} - ${formatTime(session.shift!.endTime!)}';
+                    '${formatTime(session.shift!.startTime!)} - ${formatTime(session.shift!.endTime!)}';
               }
 
-              if (isFirstCheckin && session.shift != null && session.checkinAt != null) {
+              if (isFirstCheckin &&
+                  session.shift != null &&
+                  session.checkinAt != null) {
                 DateTime shiftStart = parseTime(session.shift!.startTime!);
-                DateTime checkin = convertDateTimeLocalTimeZone(session.checkinAt!);
+                DateTime checkin =
+                    convertDateTimeLocalTimeZone(session.checkinAt!);
 
                 shiftStart = DateTime(
                   checkin.year,
@@ -257,7 +261,7 @@ class MonthlyAttendanceController extends GetxController {
 
                 Duration checkinDelay = checkin.difference(shiftStart);
                 delay = formatDurationAtten(checkinDelay);
-                isFirstCheckin=false;
+                isFirstCheckin = false;
               }
             }
 
@@ -281,11 +285,9 @@ class MonthlyAttendanceController extends GetxController {
               xlsio.ExcelDataCell(
                   columnHeader: 'Shift',
                   value: shiftTime.isNotEmpty ? shiftTime : '-'),
+              xlsio.ExcelDataCell(columnHeader: 'Total Time', value: totalTime),
               xlsio.ExcelDataCell(
-                  columnHeader: 'Total Time', value: totalTime),
-              xlsio.ExcelDataCell(
-                  columnHeader: 'Delay',
-                  value: delay.isNotEmpty ? delay : '-'),
+                  columnHeader: 'Delay', value: delay.isNotEmpty ? delay : '-'),
             ],
           ),
         );
@@ -295,17 +297,18 @@ class MonthlyAttendanceController extends GetxController {
     String fileName = '';
     if (timePeriod == 'Monthly') {
       fileName =
-      "${removeSubstringInParentheses(currUserName.value)}_${formatDateToMMMM(startDateTime.value)}_Attendance.xlsx";
+          "${removeSubstringInParentheses(currUserName.value)}_${formatDateToMMMM(startDateTime.value)}_Attendance.xlsx";
     } else {
       fileName =
-      "${removeSubstringInParentheses(currUserName.value)}_${formatDateToDMMM(startDailyDateTime.value)}-${formatDateToDMMM(endDailyDateTime.value)}_Attendance.xlsx";
+          "${removeSubstringInParentheses(currUserName.value)}_${formatDateToDMMM(startDailyDateTime.value)}-${formatDateToDMMM(endDailyDateTime.value)}_Attendance.xlsx";
     }
     await generateExcel(fileName: fileName, dataRows: excelDataRows);
   }
 
   DateTime parseTime(String time) {
     List<String> parts = time.split(':');
-    return DateTime(0, 1, 1, int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+    return DateTime(
+        0, 1, 1, int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
   }
 
   String formatDurationAtten(Duration duration) {
@@ -393,7 +396,6 @@ class MonthlyAttendanceController extends GetxController {
       }),
     );
   }
-
 
   Widget _buildEventsMarker(DateTime date, List<Event> events) {
     var today = DateTime.now();

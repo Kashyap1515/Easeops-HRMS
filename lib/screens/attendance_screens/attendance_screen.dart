@@ -26,7 +26,7 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
                   controller.selectedDate.value = dateTime;
                   controller.selectDateController.text =
                       formatDateToddMMyyyy(dateTime);
-                  var locationList = uri.queryParameters["locationId"] ?? '';
+                  var locationList = uri.queryParameters["locationIds"] ?? '';
                   if (locationList.isNotEmpty) {
                     controller.selectedLocationId.value =
                         locationList.split(',');
@@ -37,9 +37,15 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
                       formatDateToddMMyyyy(DateTime.now());
                 }
               }
+
               await controller.getLocationData();
               controller.getShiftData();
               controller.setLocation();
+              html.window.history.pushState(
+                null,
+                'Attendance',
+                '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(controller.selectedDate.value)}&locationIds=${controller.selectedLocationId.join(',')}',
+              );
             });
           },
           builder: (context) {
@@ -131,7 +137,7 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
                       html.window.history.pushState(
                         null,
                         'Attendance',
-                        '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(controller.selectedDate.value)}',
+                        '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(controller.selectedDate.value)}&locationIds=${controller.selectedLocationId.join(',')}',
                       );
                       controller.selectDateController.text = dateFormat;
                       controller.isDropDownLoading.value = false;
@@ -196,6 +202,11 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
                               ? 'Please select Location'
                               : '';
                       controller.isExport.value = true;
+                      html.window.history.pushState(
+                        null,
+                        'Attendance',
+                        '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(controller.selectedDate.value)}&locationIds=${controller.selectedLocationId.join(',')}',
+                      );
                       await controller.getAttendanceUserAPIData();
                     },
                     whenEmpty: 'Location(s)',
@@ -282,11 +293,6 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
               itemCount: controller.attendanceUserReport.length,
               itemBuilder: (context, index) {
                 var userData = controller.attendanceUserReport[index];
-                // AttendanceReportUserModel attendanceData =
-                //     userData['attendanceData'];
-                // // List<Location> locationsList = userData['locations'] ?? [];
-                // var userId = userData['userId'];
-                // var userName = userData['userName'];
                 var userId = userData.user!.id;
                 var userName = userData.user!.name;
                 var locationList = controller.getUserLocationList(userId!);
@@ -378,39 +384,6 @@ class AttendanceScreen extends GetView<AttendanceScreenController> {
                               child: customText(title: userName!),
                             ),
                           ),
-                          // Expanded(
-                          //   flex: 2,
-                          //   child: locationsList.isEmpty
-                          //       ? const Text('')
-                          //       : locationsList.length == 1
-                          //           ? Text(
-                          //               locationsList.first.alias ?? '',
-                          //               style: GoogleFonts.inter(
-                          //                 color: AppColors.kcBlackColor,
-                          //                 fontSize: 14,
-                          //                 fontWeight: FontWeight.w400,
-                          //               ),
-                          //             )
-                          //           : InkWell(
-                          //               onTap: () {
-                          //                 if (locationsList.isNotEmpty) {
-                          //                   customShowDataDialog(
-                          //                     title: '$userName’s Locations',
-                          //                     data: locationsList.toList(),
-                          //                   );
-                          //                 }
-                          //               },
-                          //               child: Text(
-                          //                 '${locationsList.length} Locations',
-                          //                 style: GoogleFonts.inter(
-                          //                   color: AppColors.kcBlackColor,
-                          //                   fontSize: 14,
-                          //                   fontWeight: FontWeight.w400,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          // ),
-                          // Check-in session info
                           controller.buildSessionInfo(
                             timeFormatted: sessionList.isNotEmpty
                                 ? sessionList.first.checkinAt

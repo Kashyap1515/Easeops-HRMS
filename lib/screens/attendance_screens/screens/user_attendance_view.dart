@@ -60,7 +60,7 @@ class UserAttendanceViewScreen extends GetView<MonthlyAttendanceController> {
                             child: const Icon(Icons.arrow_back_ios_new_rounded),
                             onTap: () {
                               Get.offAllNamed(
-                                '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(DateTime.now())}&locationId=${controller.locationIds.join(',')}',
+                                '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(DateTime.now())}&locationIds=${controller.locationIds.join(',')}',
                               );
                             },
                           ),
@@ -76,43 +76,54 @@ class UserAttendanceViewScreen extends GetView<MonthlyAttendanceController> {
                             ),
                           ),
                           Obx(() {
-                            return controller.isListView.value == true
+                            return controller.isListView.value
                                 ? const SizedBox.shrink()
-                                : CustomDropDown(
-                                    itemList: controller.userListData.isNotEmpty
-                                        ? controller.userListData.toList()
-                                        : [],
-                                    isMapList: true,
-                                    height: 40,
-                                    width: 240,
-                                    hintText: 'Select User',
-                                    selectedItem: controller
-                                            .userListData.isNotEmpty
-                                        ? controller.userListData.firstWhere(
-                                            (user) =>
-                                                user['label'] ==
-                                                controller
-                                                    .removeSubstringInParentheses(
-                                                        controller.currUserName
-                                                            .value),
-                                            orElse: () => {'label': ''},
-                                          )['label']
-                                        : '',
-                                    onTapCallback: (val) async {
-                                      String userName = val['label'];
-                                      String userId = val['id'];
+                                : controller.userListData.isEmpty
+                                    ? const SizedBox.shrink()
+                                    : CustomDropDown(
+                                        itemList: controller
+                                                .userListData.isNotEmpty
+                                            ? controller.userListData.toList()
+                                            : [],
+                                        isMapList: true,
+                                        height: 40,
+                                        width: 240,
+                                        hintText: 'Select User',
+                                        selectedItem:
+                                            controller.userListData.isNotEmpty
+                                                ? controller.userListData
+                                                    .firstWhere(
+                                                    (user) =>
+                                                        user['label'] ==
+                                                        controller
+                                                            .removeSubstringInParentheses(
+                                                                controller
+                                                                    .currUserName
+                                                                    .value),
+                                                    orElse: () => {
+                                                      'label': controller
+                                                          .userListData
+                                                          .first['label']
+                                                    },
+                                                  )['label']
+                                                : controller.userListData
+                                                    .first['label'],
+                                        onTapCallback: (val) async {
+                                          String userName = val['label'];
+                                          String userId = val['id'];
 
-                                      html.window.history.pushState(
-                                        null,
-                                        ' ',
-                                        "${AppRoutes.routeAttendanceDetail}?user=$userName&userId=$userId&locationId=${controller.currLocationId.value}",
+                                          html.window.history.pushState(
+                                            null,
+                                            ' ',
+                                            "${AppRoutes.routeAttendanceDetail}?user=$userName&userId=$userId&locationId=${controller.currLocationId.value}",
+                                          );
+                                          controller.events.clear();
+                                          controller.currUserId.value = userId;
+                                          controller.currUserName.value =
+                                              userName;
+                                          await controller.getActiveDaysData();
+                                        },
                                       );
-                                      controller.events.clear();
-                                      controller.currUserId.value = userId;
-                                      controller.currUserName.value = userName;
-                                      await controller.getActiveDaysData();
-                                    },
-                                  );
                           }),
                           sbw10,
                           Tooltip(

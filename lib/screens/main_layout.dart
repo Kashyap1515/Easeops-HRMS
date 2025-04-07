@@ -132,7 +132,7 @@ class MainLayoutState extends State<MainLayout> {
                       iconImage: AppImages.imageAttendance,
                       onTap: () {
                         Get.offNamedUntil(
-                          AppRoutes.routeAttendance,
+                          '${AppRoutes.routeAttendance}?date=${formatDateToDDashMMDashY(DateTime.now())}',
                           (route) => false,
                         );
                         AppPreferences.setSelectedItem(

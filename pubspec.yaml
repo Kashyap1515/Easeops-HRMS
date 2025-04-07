@@ -54,7 +54,7 @@ dependencies:
   flutter_typeahead: ^5.0.2
   url_strategy: ^0.2.0
   cached_network_image: ^3.3.1
-
+  google_maps_flutter: ^2.6.0
 
 dev_dependencies:
   flutter_test:

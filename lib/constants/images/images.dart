@@ -9,4 +9,7 @@ class AppImages {
   static const String imageSetting = 'assets/images/settings.svg';
   static const String imageVerify = 'assets/images/verify.png';
   static const String imageNotVerify = 'assets/images/not_verify.png';
+  static const String imageDevicePin = 'assets/images/device_pin.svg';
+  static const String imageMapLocation = 'assets/images/map_location.svg';
+
 }

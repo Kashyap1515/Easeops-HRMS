@@ -3,11 +3,13 @@ import 'package:easeops_web_hrms/screens/attendance_screens/model/attendance_rep
 import 'package:easeops_web_hrms/screens/attendance_screens/model/image_upload_model.dart';
 import 'package:easeops_web_hrms/screens/shift_pages/model/shift_model.dart';
 import 'package:easeops_web_hrms/utils/generate_excel.dart';
+import 'package:easeops_web_hrms/utils/get_map.dart';
 import 'package:easeops_web_hrms/utils/image_picker_file.dart';
 import 'package:easeops_web_hrms/widgets/common_widgets/custom_show_single_image.dart';
 import 'package:easeops_web_hrms/widgets/common_widgets/custom_time_picker.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -208,37 +210,37 @@ class AttendanceScreenController extends GetxController {
               ),
             ),
           sbw5,
-          // if (timeFormatted != null)
-          // InkWell(
-          //   onTap: () async {
-          //     if (coordinates.isNotEmpty && coordinates.length == 2) {
-          //       await customAddDialog(
-          //         title: 'Google Map View',
-          //         items: Column(
-          //           children: [
-          //             SizedBox(
-          //               height: Get.size.height / 1.5,
-          //               width: Get.size.width / 1.5,
-          //               child: CustomGoogleMap(
-          //                 storeLocation: LatLng(
-          //                   double.parse(coordinates.first),
-          //                   double.parse(coordinates.last),
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         padding: EdgeInsets.zero,
-          //         btnTitle: AppStrings.btnClose,
-          //         onBtnCallback: Get.back,
-          //       );
-          //     }
-          //   },
-          //   child: Tooltip(
-          //     message: 'Show Location',
-          //     child: SvgPicture.asset(AppImages.imageMapLocation),
-          //   ),
-          // ),
+          if (timeFormatted != null)
+            InkWell(
+              onTap: () async {
+                if (coordinates.isNotEmpty && coordinates.length == 2) {
+                  await customAddDialog(
+                    title: 'Google Map View',
+                    items: Column(
+                      children: [
+                        SizedBox(
+                          height: Get.size.height / 1.5,
+                          width: Get.size.width / 1.5,
+                          child: CustomGoogleMap(
+                            storeLocation: LatLng(
+                              double.parse(coordinates.first),
+                              double.parse(coordinates.last),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.zero,
+                    btnTitle: AppStrings.btnClose,
+                    onBtnCallback: Get.back,
+                  );
+                }
+              },
+              child: Tooltip(
+                message: 'Show Location',
+                child: SvgPicture.asset(AppImages.imageMapLocation),
+              ),
+            ),
         ],
       ),
     );
