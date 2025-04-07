@@ -208,7 +208,7 @@ class MonthlyAttendanceController extends GetxController {
           date = date.add(const Duration(days: 1))) {
         List<String> lstInTime = [];
         List<String> lstOutTime = [];
-        String delay = '-';
+        // String delay = '-';
         String shiftTime = '-';
         String totalTime = '-';
 
@@ -259,8 +259,8 @@ class MonthlyAttendanceController extends GetxController {
                   shiftStart.second,
                 );
 
-                Duration checkinDelay = checkin.difference(shiftStart);
-                delay = formatDurationAtten(checkinDelay);
+                // Duration checkinDelay = checkin.difference(shiftStart);
+                // delay = formatDurationAtten(checkinDelay);
                 isFirstCheckin = false;
               }
             }
@@ -286,8 +286,8 @@ class MonthlyAttendanceController extends GetxController {
                   columnHeader: 'Shift',
                   value: shiftTime.isNotEmpty ? shiftTime : '-'),
               xlsio.ExcelDataCell(columnHeader: 'Total Time', value: totalTime),
-              xlsio.ExcelDataCell(
-                  columnHeader: 'Delay', value: delay.isNotEmpty ? delay : '-'),
+              // xlsio.ExcelDataCell(
+              //     columnHeader: 'Delay', value: delay.isNotEmpty ? delay : '-'),
             ],
           ),
         );
@@ -357,7 +357,7 @@ class MonthlyAttendanceController extends GetxController {
             markerDecoration: const BoxDecoration(
               color: Colors.transparent,
             ),
-            isTodayHighlighted: false,
+            isTodayHighlighted: true,
             cellAlignment: Alignment.center,
             selectedDecoration: const BoxDecoration(
               shape: BoxShape.rectangle,

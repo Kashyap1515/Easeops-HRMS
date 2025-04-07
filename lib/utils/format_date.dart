@@ -126,6 +126,6 @@ String formatDuration(Duration duration) {
       ? duration.inMinutes % 60
       : (duration.inMinutes % 60);
   final formattedDifference =
-      '${hours != 0 ? '$hours hour' : ''}${minutes != 0 ? '$minutes minute' : 'Less than a minute'}';
+      '${hours != 0 ? '$hours hour' : ''}${minutes != 0 ? '$minutes minute' : ''}';
   return formattedDifference;
 }

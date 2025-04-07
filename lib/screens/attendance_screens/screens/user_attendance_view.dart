@@ -150,40 +150,76 @@ class UserAttendanceViewScreen extends GetView<MonthlyAttendanceController> {
                             ),
                           ),
                           sbw8,
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.kcWhiteColor,
-                              borderRadius: br8,
-                              border:
-                                  Border.all(color: AppColors.kcBorderColor),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: all8,
-                                  child: InkWell(
-                                    child: Icon(
-                                      Icons.calendar_month,
-                                      color: controller.isListView.value
-                                          ? AppColors.kcBlackColor
-                                          : AppColors.kcPrimaryColor,
-                                    ),
-                                    onTap: () async {
-                                      controller.isListView.value = false;
-                                      await controller.getActiveDaysData();
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     color: AppColors.kcWhiteColor,
+                          //     borderRadius: br8,
+                          //     border:
+                          //         Border.all(color: AppColors.kcBorderColor),
+                          //   ),
+                          //   child: Row(
+                          //     children: [
+                          //       Padding(
+                          //         padding: all8,
+                          //         child: InkWell(
+                          //           child: Icon(
+                          //             Icons.calendar_month,
+                          //             color: controller.isListView.value
+                          //                 ? AppColors.kcBlackColor
+                          //                 : AppColors.kcPrimaryColor,
+                          //           ),
+                          //           onTap: () async {
+                          //             controller.isListView.value = false;
+                          //             await controller.getActiveDaysData();
+                          //           },
+                          //         ),
+                          //       ),
+                          //       Container(
+                          //         height: 20,
+                          //         width: 2,
+                          //         color: AppColors.kcBorderColor,
+                          //       ),
+                          //       Padding(
+                          //         padding: all8,
+                          //         child: InkWell(
+                          //           child: Icon(
+                          //             Icons.list,
+                          //             color: controller.isListView.value
+                          //                 ? AppColors.kcPrimaryColor
+                          //                 : AppColors.kcBlackColor,
+                          //           ),
+                          //           onTap: () async {
+                          //             controller.isListView.value = true;
+                          //             controller.startDailyDateTime.value =
+                          //                 DateTime.now()
+                          //                     .subtract(const Duration(days: 6))
+                          //                     .copyWith(
+                          //                       hour: 0,
+                          //                       minute: 0,
+                          //                       second: 0,
+                          //                       millisecond: 0,
+                          //                       microsecond: 0,
+                          //                     );
+                          //             controller.endDailyDateTime.value =
+                          //                 DateTime.now()
+                          //                     .subtract(const Duration(days: 1))
+                          //                     .copyWith(
+                          //                       hour: 23,
+                          //                       minute: 59,
+                          //                       second: 59,
+                          //                       millisecond: 999,
+                          //                       microsecond: 999,
+                          //                     );
+                          //             await controller.getDailyAttendanceData();
+                          //           },
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                       sbh8,
-                      // const Divider(
-                      //   height: 2,
-                      //   thickness: 2,
-                      // ),
                     ],
                   ),
                 ),
@@ -203,9 +239,9 @@ class UserAttendanceViewScreen extends GetView<MonthlyAttendanceController> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // controller.isListView.value
-                    //     ? dataBodyListView()
-                    controller.dataBodyCalenderView(),
+                    /*controller.isListView.value
+                        ? dataBodyListView()
+                        : */controller.dataBodyCalenderView(),
                   ],
                 ),
               ],
@@ -408,31 +444,6 @@ class UserAttendanceViewScreen extends GetView<MonthlyAttendanceController> {
                         .map((session) => ListTile(
                               title: Row(
                                 children: [
-                                  // Expanded(
-                                  //   flex: 2,
-                                  //   child: Tooltip(
-                                  //     message: session.shift!.startTime ==
-                                  //                 null ||
-                                  //             session.shift!.endTime == null
-                                  //         ? ''
-                                  //         : '${convertTo12HourFormat(
-                                  //             session.shift!.startTime ?? '',
-                                  //           )} - ${convertTo12HourFormat(
-                                  //             session.shift!.endTime ?? '',
-                                  //           )}',
-                                  //     child: Text(
-                                  //       sessionData.indexOf(session) != 0
-                                  //           ? ''
-                                  //           : session.shift == null
-                                  //               ? ''
-                                  //               : session.shift!.name ?? '',
-                                  //       style: GoogleFonts.inter(
-                                  //         fontSize: 14,
-                                  //         color: AppColors.kcBlackColor,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   Expanded(
                                     flex: 2,
                                     child: Text(
